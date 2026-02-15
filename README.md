@@ -22,12 +22,13 @@ Mod Menu が導入されている場合、ゲーム内の設定画面から記�
 
 記憶された選択を直接リセットしたい場合は、Minecraft の `config` フォルダ内にある `ditto.json` を削除、またはエディタで編集してください。
 
-## テスト用コマンド
+## テスト・管理コマンド
 
-動作確認用に、ダイアログを表示するコマンドを用意しています。
+動作確認や記憶のリセット用に、以下のコマンドを用意しています。
 
-- `/dittotest 1`: ConfirmScreen (はい/いいえ) のテスト
-- `/dittotest 2`: NoticeScreen (通知/OK) のテスト
+- `/ditto test 1`: ConfirmScreen (はい/いいえ) のテスト表示
+- `/ditto test 2`: NoticeScreen (通知/OK) のテスト表示
+- `/ditto clear`: 記憶されたすべての選択をリセット
 
 ### 環境
 - **Minecraft**: 1.21.11

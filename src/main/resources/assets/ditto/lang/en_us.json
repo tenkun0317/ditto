@@ -1,9 +1,12 @@
 {
   "ditto.dont_show_again": "Don't show again",
   "title.ditto.config": "Ditto Configuration",
-  "category.ditto.general": "Saved Choices",
+  "category.ditto.general": "General Settings",
+  "category.ditto.saved_choices": "Saved Choices",
   "option.ditto.choice": "Choice (Yes/No)",
   "option.ditto.delete": "Delete this choice",
+  "option.ditto.id_info": "Internal ID: %s",
   "option.ditto.clear_all": "Clear all saved choices",
-  "option.ditto.clear_all.tooltip": "If enabled, all saved choices will be deleted when you save the configuration."
+  "option.ditto.clear_all.tooltip": "If enabled, all saved choices will be deleted when you save the configuration.",
+  "option.ditto.no_choices": "No choices saved yet. Go find some dialogs!"
 }

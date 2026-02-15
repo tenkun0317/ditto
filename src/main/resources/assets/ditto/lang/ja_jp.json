@@ -1,9 +1,12 @@
 {
   "ditto.dont_show_again": "次回から表示しない",
   "title.ditto.config": "Ditto 設定",
-  "category.ditto.general": "記憶された選択",
+  "category.ditto.general": "全般設定",
+  "category.ditto.saved_choices": "記憶された選択",
   "option.ditto.choice": "選択内容 (はい/いいえ)",
   "option.ditto.delete": "この選択を削除する",
+  "option.ditto.id_info": "内部ID: %s",
   "option.ditto.clear_all": "すべての記憶を消去する",
-  "option.ditto.clear_all.tooltip": "オンにすると、設定を保存したときにすべての記憶された選択が削除されます。"
+  "option.ditto.clear_all.tooltip": "オンにすると、設定を保存したときにすべての記憶された選択が削除されます。",
+  "option.ditto.no_choices": "記憶された選択はまだありません。"
 }
