@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "ditto",
+  "version": "${version}",
+  "name": "Ditto",
+  "description": "Remembers dialog choices.",
+  "authors": [
+    "inorganic"
+  ],
+  "contact": {
+    "sources": "https://github.com/tenkun0317/ditto"
+  },
+  "license": "MIT",
+  "icon": "assets/ditto/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "inorganic.ditto.Ditto"
+    ],
+    "client": [
+      "inorganic.ditto.DittoClient"
+    ]
+  },
+  "mixins": [
+    "ditto.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-language-kotlin": ">=1.13.8+kotlin.2.3.0"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
