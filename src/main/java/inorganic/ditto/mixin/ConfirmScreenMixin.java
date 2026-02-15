@@ -40,11 +40,9 @@ public abstract class ConfirmScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInitFinished(CallbackInfo ci) {
-        // 画面の下半分（通常ボタンがある場所）にあるウィジェットの中で、最も高い位置にあるものを探す
         int buttonY = -1;
         for (Element element : this.children()) {
             if (element instanceof ClickableWidget widget) {
-                // 画面の下半分にあり、かつある程度の幅がある（ボタンらしい）ものを対象にする
                 if (widget.getY() > this.height / 2 && widget.getWidth() > 20) {
                     if (buttonY == -1 || widget.getY() < buttonY) {
                         buttonY = widget.getY();
@@ -59,15 +57,11 @@ public abstract class ConfirmScreenMixin extends Screen {
         int y;
 
         if (buttonY != -1) {
-            // ボタンが見つかった場合、その 21 ピクセル上（ボタンの直上）に配置
             y = buttonY - 21;
-            
-            // もしボタンの上がタイトルや文に近すぎる（上すぎる）場合は、ボタンのさらに下に配置する
             if (y < this.height / 2) {
-                y = buttonY + 24; // ボタンの下側に配置
+                y = buttonY + 24;
             }
         } else {
-            // ボタンが見つからない場合のフォールバック（画面下部から 40 ピクセル上）
             y = this.height - 40;
         }
 

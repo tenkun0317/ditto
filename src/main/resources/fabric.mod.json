@@ -19,6 +19,9 @@
     ],
     "client": [
       "inorganic.ditto.DittoClient"
+    ],
+    "modmenu": [
+      "inorganic.ditto.integration.ModMenuIntegration"
     ]
   },
   "mixins": [

@@ -1,3 +1,7 @@
 {
-  "ditto.dont_show_again": "次回から表示しない"
+  "ditto.dont_show_again": "次回から表示しない",
+  "title.ditto.config": "Ditto 設定",
+  "category.ditto.general": "記憶された選択",
+  "option.ditto.choice": "選択内容 (はい/いいえ)",
+  "option.ditto.delete": "この選択を削除する"
 }

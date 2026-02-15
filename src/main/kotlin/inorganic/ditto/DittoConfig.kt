@@ -12,6 +12,8 @@ object DittoConfig {
     
     private var choices: MutableList<SavedChoice> = mutableListOf()
 
+    val allChoices: List<SavedChoice> get() = choices
+
     fun load() {
         if (configFile.exists()) {
             try {
@@ -39,5 +41,9 @@ object DittoConfig {
         choices.removeIf { it.title == title && it.message == message }
         choices.add(SavedChoice(title, message, choice))
         save()
+    }
+
+    fun setChoices(newChoices: List<SavedChoice>) {
+        choices = newChoices.toMutableList()
     }
 }

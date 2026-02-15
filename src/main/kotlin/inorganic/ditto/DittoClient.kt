@@ -21,7 +21,7 @@ class DittoClient : ClientModInitializer {
                         
                         client.execute {
                             val messageBuilder = StringBuilder()
-                            val lines = id * 5 // 1なら5行、2なら10行、3なら15行
+                            val lines = id * 5
                             for (i in 1..lines) {
                                 messageBuilder.append("This is test line $i for dialog $id.\n")
                             }

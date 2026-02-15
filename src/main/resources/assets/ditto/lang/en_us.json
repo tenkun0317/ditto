@@ -1,3 +1,7 @@
 {
-  "ditto.dont_show_again": "Don't show again"
+  "ditto.dont_show_again": "Don't show again",
+  "title.ditto.config": "Ditto Configuration",
+  "category.ditto.general": "Saved Choices",
+  "option.ditto.choice": "Choice (Yes/No)",
+  "option.ditto.delete": "Delete this choice"
 }
