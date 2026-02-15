@@ -10,15 +10,16 @@ object DittoConfig {
     
     data class SavedChoice(val title: String, val message: String, val choice: Boolean)
     
-    private var choices: MutableList<SavedChoice> = mutableListOf()
+    private var choicesMap: MutableMap<Pair<String, String>, Boolean> = mutableMapOf()
 
-    val allChoices: List<SavedChoice> get() = choices
+    val allChoices: List<SavedChoice> 
+        get() = choicesMap.map { SavedChoice(it.key.first, it.key.second, it.value) }
 
     fun load() {
         if (configFile.exists()) {
             try {
                 val loaded = GSON.fromJson(configFile.readText(), Array<SavedChoice>::class.java)
-                choices = loaded.toMutableList()
+                choicesMap = loaded.associate { (it.title to it.message) to it.choice }.toMutableMap()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -27,23 +28,23 @@ object DittoConfig {
 
     fun save() {
         try {
-            configFile.writeText(GSON.toJson(choices))
+            val list = allChoices
+            configFile.writeText(GSON.toJson(list))
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     fun getChoice(title: String, message: String): Boolean? {
-        return choices.find { it.title == title && it.message == message }?.choice
+        return choicesMap[title to message]
     }
 
     fun setChoice(title: String, message: String, choice: Boolean) {
-        choices.removeIf { it.title == title && it.message == message }
-        choices.add(SavedChoice(title, message, choice))
+        choicesMap[title to message] = choice
         save()
     }
 
     fun setChoices(newChoices: List<SavedChoice>) {
-        choices = newChoices.toMutableList()
+        choicesMap = newChoices.associate { (it.title to it.message) to it.choice }.toMutableMap()
     }
 }

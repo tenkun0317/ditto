@@ -17,19 +17,27 @@ class ModMenuIntegration : ModMenuApi {
             val category = builder.getOrCreateCategory(Text.translatable("category.ditto.general"))
             val entryBuilder = builder.entryBuilder()
             
+            var clearAll = false
+            category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.ditto.clear_all"), false)
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("option.ditto.clear_all.tooltip"))
+                .setSaveConsumer { clearAll = it }
+                .build())
+
             val choicesToProcess = DittoConfig.allChoices.map { it.copy() }.toMutableList()
             val deletedIndices = mutableSetOf<Int>()
 
             choicesToProcess.forEachIndexed { index, choice ->
-                val label = if (choice.message.length > 50) {
-                    "${choice.title}: ${choice.message.take(47)}..."
+                val shortMessage = if (choice.message.length > 30) {
+                    choice.message.take(27).replace("\n", " ") + "..."
                 } else {
-                    "${choice.title}: ${choice.message}"
+                    choice.message.replace("\n", " ")
                 }
                 
+                val label = "[${choice.title}] $shortMessage"
                 val subCategory = entryBuilder.startSubCategory(Text.literal(label))
                 
-                subCategory.add(entryBuilder.startTextDescription(Text.literal(choice.message)).build())
+                subCategory.add(entryBuilder.startTextDescription(Text.literal("Full Message: ${choice.message}")).build())
 
                 subCategory.add(entryBuilder.startBooleanToggle(Text.translatable("option.ditto.choice"), choice.choice)
                     .setDefaultValue(choice.choice)
@@ -49,8 +57,12 @@ class ModMenuIntegration : ModMenuApi {
             }
             
             builder.setSavingRunnable {
-                val finalChoices = choicesToProcess.filterIndexed { index, _ -> !deletedIndices.contains(index) }
-                DittoConfig.setChoices(finalChoices)
+                if (clearAll) {
+                    DittoConfig.setChoices(emptyList())
+                } else {
+                    val finalChoices = choicesToProcess.filterIndexed { index, _ -> !deletedIndices.contains(index) }
+                    DittoConfig.setChoices(finalChoices)
+                }
                 DittoConfig.save()
             }
             

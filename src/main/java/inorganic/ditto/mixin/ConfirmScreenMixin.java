@@ -34,19 +34,25 @@ public abstract class ConfirmScreenMixin extends Screen {
         Boolean savedChoice = DittoConfig.INSTANCE.getChoice(titleStr, messageStr);
         if (savedChoice != null) {
             this.callback.accept(savedChoice);
+            if (this.client != null && this.client.currentScreen == this) {
+                this.close();
+            }
             ci.cancel();
         }
     }
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInitFinished(CallbackInfo ci) {
-        int buttonY = -1;
+        int minButtonY = this.height;
+        boolean foundButton = false;
+
         for (Element element : this.children()) {
             if (element instanceof ClickableWidget widget) {
-                if (widget.getY() > this.height / 2 && widget.getWidth() > 20) {
-                    if (buttonY == -1 || widget.getY() < buttonY) {
-                        buttonY = widget.getY();
+                if (widget.getY() > this.height / 2) {
+                    if (widget.getY() < minButtonY) {
+                        minButtonY = widget.getY();
                     }
+                    foundButton = true;
                 }
             }
         }
@@ -56,10 +62,10 @@ public abstract class ConfirmScreenMixin extends Screen {
         int x = (this.width - checkboxWidth) / 2;
         int y;
 
-        if (buttonY != -1) {
-            y = buttonY - 21;
+        if (foundButton) {
+            y = minButtonY - 24;
             if (y < this.height / 2) {
-                y = buttonY + 24;
+                y = this.height - 30;
             }
         } else {
             y = this.height - 40;
@@ -72,7 +78,7 @@ public abstract class ConfirmScreenMixin extends Screen {
     }
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/booleans/BooleanConsumer;accept(Z)V"))
-    private void onCallback(BooleanConsumer instance, boolean b) {
+    private void onCallbackInvoke(BooleanConsumer instance, boolean b) {
         if (this.dittoCheckbox != null && this.dittoCheckbox.isChecked()) {
             DittoConfig.INSTANCE.setChoice(this.title.getString(), this.message.getString(), b);
         }

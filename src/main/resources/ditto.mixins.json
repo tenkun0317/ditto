@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "ConfirmScreenMixin"
+    "ConfirmScreenMixin",
+    "NoticeScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
