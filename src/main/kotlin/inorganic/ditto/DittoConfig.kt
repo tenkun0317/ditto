@@ -12,10 +12,15 @@ object DittoConfig {
     
     data class SavedChoice(val title: String, val message: String, val choice: Boolean)
     
-    private var choicesMap: MutableMap<Pair<String, String>, Boolean> = mutableMapOf()
+    data class ConfigData(
+        var bypassKeyCode: Int = 340, // GLFW_KEY_LEFT_SHIFT
+        var choices: MutableList<SavedChoice> = mutableListOf()
+    )
 
-    val allChoices: List<SavedChoice> 
-        get() = choicesMap.map { SavedChoice(it.key.first, it.key.second, it.value) }
+    private var data = ConfigData()
+
+    val bypassKeyCode: Int get() = data.bypassKeyCode
+    val allChoices: List<SavedChoice> get() = data.choices
 
     fun load() {
         if (!configFile.exists()) return
@@ -24,8 +29,15 @@ object DittoConfig {
             val content = configFile.readText()
             if (content.isBlank()) return
             
-            val loaded = GSON.fromJson(content, Array<SavedChoice>::class.java)
-            choicesMap = loaded.associate { (it.title to it.message) to it.choice }.toMutableMap()
+            val jsonElement = com.google.gson.JsonParser.parseString(content)
+            if (jsonElement.isJsonArray) {
+                // Migrate from old array-based format
+                val loaded = GSON.fromJson(jsonElement, Array<SavedChoice>::class.java)
+                data.choices = loaded.toMutableList()
+                save() // Save in new format
+            } else if (jsonElement.isJsonObject) {
+                data = GSON.fromJson(jsonElement, ConfigData::class.java)
+            }
         } catch (e: Exception) {
             logger.error("Failed to load Ditto configuration", e)
         }
@@ -33,25 +45,31 @@ object DittoConfig {
 
     fun save() {
         try {
-            configFile.writeText(GSON.toJson(allChoices))
+            configFile.writeText(GSON.toJson(data))
         } catch (e: Exception) {
             logger.error("Failed to save Ditto configuration", e)
         }
     }
 
-    fun getChoice(title: String, message: String): Boolean? = choicesMap[title to message]
+    fun getChoice(title: String, message: String): Boolean? = 
+        data.choices.find { it.title == title && it.message == message }?.choice
 
     fun setChoice(title: String, message: String, choice: Boolean) {
-        choicesMap[title to message] = choice
+        data.choices.removeIf { it.title == title && it.message == message }
+        data.choices.add(SavedChoice(title, message, choice))
         save()
     }
 
     fun clearAll() {
-        choicesMap.clear()
+        data.choices.clear()
         save()
     }
 
     fun setChoices(newChoices: List<SavedChoice>) {
-        choicesMap = newChoices.associate { (it.title to it.message) to it.choice }.toMutableMap()
+        data.choices = newChoices.toMutableList()
+    }
+
+    fun setBypassKeyCode(code: Int) {
+        data.bypassKeyCode = code
     }
 }

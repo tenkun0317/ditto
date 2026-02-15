@@ -8,5 +8,7 @@
   "option.ditto.id_info": "内部ID: %s",
   "option.ditto.clear_all": "すべての記憶を消去する",
   "option.ditto.clear_all.tooltip": "オンにすると、設定を保存したときにすべての記憶された選択が削除されます。",
+  "option.ditto.bypass_key": "バイパスキー",
+  "option.ditto.bypass_key.tooltip": "このキーを押しながらダイアログを開くと、記憶された設定を無視して手動で選択できます。",
   "option.ditto.no_choices": "記憶された選択はまだありません。"
 }

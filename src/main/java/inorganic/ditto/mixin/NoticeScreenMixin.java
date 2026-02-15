@@ -32,9 +32,18 @@ public abstract class NoticeScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     private void onInit(CallbackInfo ci) {
-        if (this.client != null && (InputUtil.isKeyPressed(this.client.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) || 
-                                    InputUtil.isKeyPressed(this.client.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT))) {
-            return;
+        if (this.client != null) {
+            int bypassKey = DittoConfig.INSTANCE.getBypassKeyCode();
+            boolean isPressed = InputUtil.isKeyPressed(this.client.getWindow(), bypassKey);
+            
+            // If the bypass key is Shift, also allow the other shift key for convenience
+            if (!isPressed && bypassKey == GLFW.GLFW_KEY_LEFT_SHIFT) {
+                isPressed = InputUtil.isKeyPressed(this.client.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
+            } else if (!isPressed && bypassKey == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+                isPressed = InputUtil.isKeyPressed(this.client.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
+            }
+
+            if (isPressed) return;
         }
 
         String titleId = DittoUtil.getIdentifier(this.title);

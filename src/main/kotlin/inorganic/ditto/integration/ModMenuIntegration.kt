@@ -4,7 +4,10 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import inorganic.ditto.DittoConfig
 import me.shedaniel.clothconfig2.api.ConfigBuilder
+import me.shedaniel.clothconfig2.api.Modifier
+import me.shedaniel.clothconfig2.api.ModifierKeyCode
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.util.InputUtil
 import net.minecraft.text.Text
 
 class ModMenuIntegration : ModMenuApi {
@@ -20,6 +23,14 @@ class ModMenuIntegration : ModMenuApi {
             val general = builder.getOrCreateCategory(Text.translatable("category.ditto.general"))
             
             var clearAll = false
+            var bypassKey = DittoConfig.bypassKeyCode
+
+            general.addEntry(entryBuilder.startKeyCodeField(Text.translatable("option.ditto.bypass_key"), InputUtil.Type.KEYSYM.createFromCode(bypassKey))
+                .setDefaultValue(InputUtil.Type.KEYSYM.createFromCode(340))
+                .setTooltip(Text.translatable("option.ditto.bypass_key.tooltip"))
+                .setKeySaveConsumer { key -> bypassKey = key.code }
+                .build())
+
             general.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.ditto.clear_all"), false)
                 .setDefaultValue(false)
                 .setTooltip(Text.translatable("option.ditto.clear_all.tooltip"))
@@ -70,6 +81,7 @@ class ModMenuIntegration : ModMenuApi {
                 if (clearAll) {
                     DittoConfig.clearAll()
                 } else {
+                    DittoConfig.setBypassKeyCode(bypassKey)
                     val finalChoices = choicesToProcess.filterIndexed { index, _ -> !deletedIndices.contains(index) }
                     DittoConfig.setChoices(finalChoices)
                     DittoConfig.save()

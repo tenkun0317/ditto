@@ -8,5 +8,7 @@
   "option.ditto.id_info": "Internal ID: %s",
   "option.ditto.clear_all": "Clear all saved choices",
   "option.ditto.clear_all.tooltip": "If enabled, all saved choices will be deleted when you save the configuration.",
+  "option.ditto.bypass_key": "Bypass Key",
+  "option.ditto.bypass_key.tooltip": "While this key is held down, saved choices will be ignored and the dialog will be shown.",
   "option.ditto.no_choices": "No choices saved yet. Go find some dialogs!"
 }
